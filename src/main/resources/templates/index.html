@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: fej('Főoldal')}"></head>
+<body id="page-top" class="fooldal">
+<nav th:replace="~{fragments :: menu('fooldal')}"></nav>
+
+<main>
+    <!-- nagy nyitókép -->
+    <header class="masthead">
+        <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+            <div class="text-center">
+                <h1 class="mx-auto my-0 text-uppercase">AutóKönyv</h1>
+                <h2 class="text-white-50 mx-auto mt-2 mb-5">
+                    Ki milyen autóval jár, és hogyan érhető el? Személyek, járművek és telefonszámok egy helyen.
+                </h2>
+                <a class="btn btn-primary" th:href="@{/adatbazis}">Adatok megtekintése</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container px-4 px-lg-5 mt-4" th:if="${param.kilepett}">
+        <div class="alert alert-success mb-0">Sikeresen kijelentkezett.</div>
+    </div>
+    <div class="container px-4 px-lg-5 mt-4" th:if="${param.nincsjog}">
+        <div class="alert alert-warning mb-0">Ehhez az oldalhoz nincs jogosultsága.</div>
+    </div>
+
+    <!-- bemutatás -->
+    <section class="about-section text-center" id="rolunk">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="text-white mb-4">Miről szól az alkalmazás?</h2>
+                    <p class="text-white-50">
+                        Az AutóKönyv egy kis nyilvántartó webalkalmazás. Három összekapcsolt adatbázistáblából dolgozik:
+                        a <strong class="text-white">személyek</strong> táblában a tulajdonosok neve és magassága,
+                        a <strong class="text-white">járművek</strong> táblában a rendszám, márka és szín,
+                        a <strong class="text-white">telefon</strong> táblában pedig a személyekhez tartozó
+                        telefonszámok vannak.
+                    </p>
+                    <p class="text-white-50 mb-0">
+                        Jelenleg <strong class="text-white" th:text="${szemelyDb}">0</strong> személy,
+                        <strong class="text-white" th:text="${jarmuDb}">0</strong> jármű és
+                        <strong class="text-white" th:text="${telefonDb}">0</strong> telefonszám szerepel az adatbázisban.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- funkciók -->
+    <section class="projects-section bg-light" id="funkciok">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+                <div class="col-xl-8 col-lg-7">
+                    <img class="img-fluid mb-3 mb-lg-0" th:src="@{/assets/img/bg-signup.jpg}" alt="Hegyi út">
+                </div>
+                <div class="col-xl-4 col-lg-5">
+                    <div class="featured-text text-center text-lg-left">
+                        <h4>Böngészhető adatok</h4>
+                        <p class="text-black-50 mb-0">
+                            Az Adatbázis menüben a három tábla adatai összekapcsolva láthatók: kinek melyik autó
+                            a sajátja, és milyen számokon hívható. Márka szerint szűrni is lehet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row gx-4 gx-lg-5 text-center">
+                <div class="col-md-4 mb-4 funkcio">
+                    <i class="fas fa-chart-pie mb-3"></i>
+                    <h5>Diagramok</h5>
+                    <p class="text-black-50 small">Márka- és színeloszlás, magasságok – Chart.js-sel.</p>
+                    <a th:href="@{/diagram}">Diagramok megnyitása</a>
+                </div>
+                <div class="col-md-4 mb-4 funkcio">
+                    <i class="fas fa-envelope-open-text mb-3"></i>
+                    <h5>Kapcsolat</h5>
+                    <p class="text-black-50 small">Írjon nekünk – minden üzenetet elmentünk.</p>
+                    <a th:href="@{/kapcsolat}">Üzenet küldése</a>
+                </div>
+                <div class="col-md-4 mb-4 funkcio">
+                    <i class="fas fa-plug mb-3"></i>
+                    <h5>REST API</h5>
+                    <p class="text-black-50 small">A járművek adatai JSON formátumban, programból is elérhetők.</p>
+                    <a th:href="@{/rest}">API leírása</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- regisztrációra hívó sáv, csak nem bejelentkezett látogatónak -->
+    <section class="signup-section" id="regisztracio" sec:authorize="isAnonymous()">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-md-10 col-lg-8 mx-auto text-center">
+                    <i class="far fa-user fa-2x mb-2 text-white"></i>
+                    <h2 class="text-white mb-4">Regisztráljon, és olvassa a beérkezett üzeneteket</h2>
+                    <a class="btn btn-primary me-2 mb-2" th:href="@{/register}">Regisztráció</a>
+                    <a class="btn btn-light mb-2" th:href="@{/login}">Bejelentkezés</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- elérhetőség -->
+    <section class="contact-section bg-black">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                            <h4 class="text-uppercase m-0">Cím</h4>
+                            <hr class="my-4 mx-auto">
+                            <div class="small text-black-50">6000 Kecskemét, Izsáki út 10.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-envelope text-primary mb-2"></i>
+                            <h4 class="text-uppercase m-0">Üzenet</h4>
+                            <hr class="my-4 mx-auto">
+                            <div class="small text-black-50"><a th:href="@{/kapcsolat}">Kapcsolat űrlap</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                            <i class="fab fa-github text-primary mb-2"></i>
+                            <h4 class="text-uppercase m-0">Forráskód</h4>
+                            <hr class="my-4 mx-auto">
+                            <div class="small text-black-50">GitHub repository</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>
