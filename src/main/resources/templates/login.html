@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('Bejelentkezés')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('login')}"></nav>
+<header th:replace="~{fragments :: fejlec('Bejelentkezés', 'Regisztrált látogatóként az Üzenetek, adminként a CRUD menü is elérhető.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-5">
+                <div class="alert alert-success" th:if="${param.registered}">Sikeres regisztráció! Most már bejelentkezhet.</div>
+                <div class="alert alert-danger" th:if="${param.error}">Hibás felhasználónév vagy jelszó.</div>
+                <div class="doboz">
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Felhasználónév</label>
+                            <input type="text" id="username" name="username" class="form-control" required autofocus>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Jelszó</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Bejelentkezés</button>
+                    </form>
+                    <p class="small text-center mt-3 mb-0">Még nincs fiókja? <a th:href="@{/register}">Regisztráljon</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>
