@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('CRUD')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('crud')}"></nav>
+<header th:replace="~{fragments :: fejlec('CRUD – személyek', 'Személyek felvétele, módosítása és törlése (csak adminisztrátor).')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="alert alert-success" th:if="${siker}" th:text="${siker}">ok</div>
+        <div class="alert alert-danger" th:if="${hiba}" th:text="${hiba}">hiba</div>
+
+        <div class="doboz">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Személyek</h2>
+                <a class="btn btn-primary btn-sm" th:href="@{/crud/uj}"><i class="fas fa-plus me-1"></i> Új személy</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Név</th>
+                        <th>Rendszám</th>
+                        <th>Jármű</th>
+                        <th>Magasság</th>
+                        <th class="text-end">Műveletek</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="sz : ${szemelyek}">
+                        <td th:text="${sz.id}">1</td>
+                        <td th:text="${sz.nev}">Név</td>
+                        <td><span class="rendszam" th:text="${sz.rendszam}">ABC123</span></td>
+                        <td th:text="${sz.jarmu != null} ? ${sz.jarmu.marka + ', ' + sz.jarmu.szin} : '-'">Ford, piros</td>
+                        <td th:text="${sz.magassag} + ' cm'">170 cm</td>
+                        <td class="text-end text-nowrap">
+                            <a class="btn btn-outline-secondary btn-sm" th:href="@{/crud/modosit/{id}(id=${sz.id})}">Módosítás</a>
+                            <form th:action="@{/crud/torol/{id}(id=${sz.id})}" method="post" class="d-inline"
+                                  onsubmit="return confirm('Biztosan törli? A személy telefonszámai is törlődnek.');">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Törlés</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(szemelyek)}">
+                        <td colspan="6" class="text-center text-muted">Nincs még személy az adatbázisban.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>

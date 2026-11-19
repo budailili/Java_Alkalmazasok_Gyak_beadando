@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('CRUD')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('crud')}"></nav>
+<header th:replace="~{fragments :: fejlec((${szemely.id == null} ? 'Új személy' : 'Személy módosítása'), 'A csillaggal jelölt mezők kitöltése kötelező.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="doboz">
+                    <form th:action="@{/crud/ment}" th:object="${szemely}" method="post" novalidate>
+                        <input type="hidden" th:field="*{id}">
+                        <div class="mb-3">
+                            <label for="nev" class="form-label">Név *</label>
+                            <input type="text" id="nev" class="form-control" th:field="*{nev}"
+                                   th:classappend="${#fields.hasErrors('nev')} ? 'is-invalid'">
+                            <div class="hiba" th:if="${#fields.hasErrors('nev')}" th:errors="*{nev}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7 mb-3">
+                                <label for="rendszam" class="form-label">Jármű *</label>
+                                <select id="rendszam" class="form-select" th:field="*{rendszam}"
+                                        th:classappend="${#fields.hasErrors('rendszam')} ? 'is-invalid'">
+                                    <option value="">– válasszon –</option>
+                                    <option th:each="j : ${jarmuvek}" th:value="${j.rndszm}"
+                                            th:text="${j.rndszm + ' – ' + j.marka + ' (' + j.szin + ')'}"></option>
+                                </select>
+                                <div class="hiba" th:if="${#fields.hasErrors('rendszam')}" th:errors="*{rendszam}"></div>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="magassag" class="form-label">Magasság (cm) *</label>
+                                <input type="number" id="magassag" class="form-control" th:field="*{magassag}"
+                                       th:classappend="${#fields.hasErrors('magassag')} ? 'is-invalid'">
+                                <div class="hiba" th:if="${#fields.hasErrors('magassag')}" th:errors="*{magassag}"></div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 mt-2">
+                            <button type="submit" class="btn btn-primary"
+                                    th:text="${szemely.id == null} ? 'Felvétel' : 'Módosítás mentése'">Mentés</button>
+                            <a class="btn btn-light" th:href="@{/crud}">Mégse</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>
