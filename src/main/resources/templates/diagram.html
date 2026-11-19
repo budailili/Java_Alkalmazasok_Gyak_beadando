@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('Diagram')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('diagram')}"></nav>
+<header th:replace="~{fragments :: fejlec('Diagram', 'Az adatbázis adatai Chart.js diagramokon.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="doboz">
+                    <h2>Járművek márkák szerint</h2>
+                    <div class="diagram-doboz"><canvas id="markaDiagram"></canvas></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="doboz">
+                    <h2>Járművek színek szerint</h2>
+                    <div class="diagram-doboz"><canvas id="szinDiagram"></canvas></div>
+                </div>
+            </div>
+        </div>
+        <div class="doboz">
+            <h2>Személyek magassága és telefonszámaik száma</h2>
+            <p class="text-muted small">Átlagos magasság: <strong th:text="${atlag} + ' cm'">0 cm</strong></p>
+            <div class="diagram-doboz"><canvas id="magassagDiagram"></canvas></div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script th:inline="javascript">
+    // az adatokat a DiagramController adja át
+    const markak = /*[[${markak}]]*/ [];
+    const markaDb = /*[[${markaDb}]]*/ [];
+    const szinek = /*[[${szinek}]]*/ [];
+    const szinDb = /*[[${szinDb}]]*/ [];
+    const szinKodok = /*[[${szinKodok}]]*/ [];
+    const nevek = /*[[${nevek}]]*/ [];
+    const magassagok = /*[[${magassagok}]]*/ [];
+    const telefonDb = /*[[${telefonDb}]]*/ [];
+    const atlagVonal = /*[[${atlagVonal}]]*/ [];
+
+    Chart.defaults.font.family = "'Nunito', sans-serif";
+
+    new Chart(document.getElementById('markaDiagram'), {
+        type: 'bar',
+        data: {
+            labels: markak,
+            datasets: [{ label: 'Járművek száma', data: markaDb, backgroundColor: '#64a19d', borderRadius: 4 }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    });
+
+    new Chart(document.getElementById('szinDiagram'), {
+        type: 'doughnut',
+        data: {
+            labels: szinek,
+            datasets: [{ data: szinDb, backgroundColor: szinKodok, borderColor: '#555', borderWidth: 1 }]
+        },
+        options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    new Chart(document.getElementById('magassagDiagram'), {
+        data: {
+            labels: nevek,
+            datasets: [
+                { type: 'bar', label: 'Magasság (cm)', data: magassagok, backgroundColor: '#2b3a39', yAxisID: 'y' },
+                { type: 'line', label: 'Átlag (cm)', data: atlagVonal, borderColor: '#c0392b',
+                  borderDash: [6, 4], pointRadius: 0, yAxisID: 'y' },
+                { type: 'line', label: 'Telefonszámok (db)', data: telefonDb, borderColor: '#64a19d',
+                  backgroundColor: '#64a19d', tension: 0.3, yAxisID: 'y2' }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: false, suggestedMin: 140, title: { display: true, text: 'cm' } },
+                y2: { position: 'right', beginAtZero: true, ticks: { stepSize: 1 },
+                      grid: { drawOnChartArea: false }, title: { display: true, text: 'db' } }
+            }
+        }
+    });
+</script>
+</body>
+</html>
