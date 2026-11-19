@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('Kapcsolat')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('kapcsolat')}"></nav>
+<header th:replace="~{fragments :: fejlec('Kapcsolat', 'Kérdése vagy észrevétele van? Írjon nekünk, az üzenetet elmentjük.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="alert alert-success" th:if="${siker}" th:text="${siker}">Siker</div>
+
+                <div class="doboz">
+                    <h2>Üzenet küldése</h2>
+                    <!-- novalidate: a böngésző ne ellenőrizzen, a validáció a szerveren történik -->
+                    <form th:action="@{/kapcsolat}" th:object="${uzenet}" method="post" novalidate>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nev" class="form-label">Név</label>
+                                <input type="text" id="nev" class="form-control" th:field="*{nev}"
+                                       th:classappend="${#fields.hasErrors('nev')} ? 'is-invalid'">
+                                <div class="hiba" th:if="${#fields.hasErrors('nev')}" th:errors="*{nev}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">E-mail cím</label>
+                                <input type="email" id="email" class="form-control" th:field="*{email}"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+                                <div class="hiba" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="targy" class="form-label">Tárgy</label>
+                            <input type="text" id="targy" class="form-control" th:field="*{targy}"
+                                   th:classappend="${#fields.hasErrors('targy')} ? 'is-invalid'">
+                            <div class="hiba" th:if="${#fields.hasErrors('targy')}" th:errors="*{targy}"></div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="szoveg" class="form-label">Üzenet</label>
+                            <textarea id="szoveg" rows="6" class="form-control" th:field="*{szoveg}"
+                                      th:classappend="${#fields.hasErrors('szoveg')} ? 'is-invalid'"></textarea>
+                            <div class="hiba" th:if="${#fields.hasErrors('szoveg')}" th:errors="*{szoveg}"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Üzenet elküldése</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>

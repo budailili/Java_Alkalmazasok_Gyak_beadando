@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('Üzenetek')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('uzenetek')}"></nav>
+<header th:replace="~{fragments :: fejlec('Üzenetek', 'A Kapcsolat űrlapon érkezett üzenetek, a legfrissebb van elöl.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="doboz">
+            <h2>Beérkezett üzenetek (<span th:text="${#lists.size(uzenetek)}">0</span>)</h2>
+            <div class="table-responsive">
+                <table class="table table-hover align-top mb-0">
+                    <thead>
+                    <tr>
+                        <th>Küldés ideje</th>
+                        <th>Név</th>
+                        <th>E-mail</th>
+                        <th>Tárgy</th>
+                        <th>Üzenet</th>
+                        <th>Küldő</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="u : ${uzenetek}">
+                        <td class="text-nowrap" th:text="${#temporals.format(u.kuldesIdeje, 'yyyy.MM.dd. HH:mm:ss')}">2026.11.04. 10:00</td>
+                        <td th:text="${u.nev}">Név</td>
+                        <td><a th:href="'mailto:' + ${u.email}" th:text="${u.email}">email</a></td>
+                        <td th:text="${u.targy}">Tárgy</td>
+                        <td class="uzenet-szoveg" th:text="${u.szoveg}">Szöveg</td>
+                        <td th:text="${u.kuldo != null} ? ${u.kuldo} : 'látogató'">látogató</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(uzenetek)}">
+                        <td colspan="6" class="text-center text-muted">Még nem érkezett üzenet.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>
