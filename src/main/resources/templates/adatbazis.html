@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('Adatbázis')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('adatbazis')}"></nav>
+<header th:replace="~{fragments :: fejlec('Adatbázis', 'A szemely, jarmu és telefon tábla adatai összekapcsolva.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+
+        <!-- 1. személyek a járművükkel és telefonszámaikkal (mindhárom tábla) -->
+        <div class="doboz">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                <h2 class="mb-2 mb-md-0">Személyek, járműveik és telefonszámaik</h2>
+                <form th:action="@{/adatbazis}" method="get" class="d-flex align-items-center gap-2">
+                    <label for="marka" class="small text-muted">Márka:</label>
+                    <select id="marka" name="marka" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="">mind</option>
+                        <option th:each="m : ${markak}" th:value="${m}" th:text="${m}"
+                                th:selected="${m == valasztottMarka}"></option>
+                    </select>
+                    <noscript><button class="btn btn-primary btn-sm" type="submit">Szűrés</button></noscript>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Név</th>
+                        <th>Magasság</th>
+                        <th>Rendszám</th>
+                        <th>Márka</th>
+                        <th>Szín</th>
+                        <th>Telefonszámok</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="sz : ${szemelyek}">
+                        <td th:text="${sz.id}">1</td>
+                        <td th:text="${sz.nev}">Név</td>
+                        <td th:text="${sz.magassag} + ' cm'">170 cm</td>
+                        <td><span class="rendszam" th:text="${sz.rendszam}">ABC123</span></td>
+                        <td th:text="${sz.jarmu != null} ? ${sz.jarmu.marka} : '-'">Ford</td>
+                        <td th:text="${sz.jarmu != null} ? ${sz.jarmu.szin} : '-'">piros</td>
+                        <td>
+                            <span th:each="t, st : ${sz.telefonok}">
+                                <span th:text="${t.szam}">123456</span><span th:if="${!st.last}">, </span>
+                            </span>
+                            <span th:if="${#lists.isEmpty(sz.telefonok)}" class="text-muted">nincs</span>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(szemelyek)}">
+                        <td colspan="7" class="text-center text-muted">Nincs a szűrésnek megfelelő személy.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- 2. járművek és tulajdonosaik -->
+            <div class="col-lg-7">
+                <div class="doboz">
+                    <h2>Járművek</h2>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped align-middle mb-0">
+                            <thead>
+                            <tr><th>Rendszám</th><th>Márka</th><th>Szín</th><th>Tulajdonos</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="sor : ${jarmuSorok}">
+                                <td><span class="rendszam" th:text="${sor[0]}">ABC123</span></td>
+                                <td th:text="${sor[1]}">Ford</td>
+                                <td th:text="${sor[2]}">piros</td>
+                                <td th:text="${sor[3]}">Tóth Ferenc</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 3. telefonkönyv -->
+            <div class="col-lg-5">
+                <div class="doboz">
+                    <h2>Telefonkönyv</h2>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped align-middle mb-0">
+                            <thead>
+                            <tr><th>Szám</th><th>Név</th><th>Autó</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="t : ${telefonok}">
+                                <td th:text="${t.szam}">345678</td>
+                                <td th:text="${t.szemely != null} ? ${t.szemely.nev} : '?'">Név</td>
+                                <td th:text="${t.szemely != null and t.szemely.jarmu != null} ? ${t.szemely.jarmu.marka + ' (' + t.szemely.jarmu.szin + ')'} : '-'">Ford</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>
