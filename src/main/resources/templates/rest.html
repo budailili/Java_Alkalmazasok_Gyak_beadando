@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('REST')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('rest')}"></nav>
+<header th:replace="~{fragments :: fejlec('REST API', 'A járművek adatai JSON formátumban, cURL-ből vagy Postmanből is elérhetők.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="doboz">
+            <h2>Végpontok</h2>
+            <p>Alap URL: <code id="alapUrl">/api/jarmuvek</code></p>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                    <tr><th>Metódus</th><th>Útvonal</th><th>Leírás</th><th>Válasz</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="badge bg-success">GET</span></td><td><code>/api/jarmuvek</code></td>
+                        <td>Az összes jármű listája</td><td>200</td></tr>
+                    <tr><td><span class="badge bg-success">GET</span></td><td><code>/api/jarmuvek/{rendszám}</code></td>
+                        <td>Egy jármű adatai</td><td>200, 404</td></tr>
+                    <tr><td><span class="badge bg-primary">POST</span></td><td><code>/api/jarmuvek</code></td>
+                        <td>Új jármű felvétele (JSON törzs)</td><td>201, 400, 409</td></tr>
+                    <tr><td><span class="badge bg-warning text-dark">PUT</span></td><td><code>/api/jarmuvek/{rendszám}</code></td>
+                        <td>Márka és szín módosítása</td><td>200, 400, 404</td></tr>
+                    <tr><td><span class="badge bg-danger">DELETE</span></td><td><code>/api/jarmuvek/{rendszám}</code></td>
+                        <td>Jármű törlése (ha nem tartozik hozzá személy)</td><td>204, 404, 409</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="doboz">
+                    <h2>Példa JSON törzs</h2>
+<pre class="bg-light p-3 rounded mb-0"><code>{
+  "rndszm": "KLM901",
+  "marka": "Opel",
+  "szin": "fekete"
+}</code></pre>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="doboz">
+                    <h2>cURL példák</h2>
+<pre class="bg-light p-3 rounded mb-0 small"><code>curl -i http://rivendell.nje.hu:9443/gvlrpx/api/jarmuvek
+
+curl -i -X POST -H "Content-Type: application/json" \
+  -d "{\"rndszm\":\"KLM901\",\"marka\":\"Opel\",\"szin\":\"fekete\"}" \
+  http://rivendell.nje.hu:9443/gvlrpx/api/jarmuvek
+
+curl -i -X PUT -H "Content-Type: application/json" \
+  -d "{\"marka\":\"Opel\",\"szin\":\"ezüst\"}" \
+  http://rivendell.nje.hu:9443/gvlrpx/api/jarmuvek/KLM901
+
+curl -i -X DELETE http://rivendell.nje.hu:9443/gvlrpx/api/jarmuvek/KLM901</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="doboz">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Kipróbálás</h2>
+                <button id="lekeres" type="button" class="btn btn-primary btn-sm">GET /api/jarmuvek</button>
+            </div>
+            <pre id="valasz" class="bg-dark text-white p-3 rounded mb-0 small">Kattintson a gombra a lekérdezéshez.</pre>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+<script th:inline="javascript">
+    const apiUrl = /*[[@{/api/jarmuvek}]]*/ '/api/jarmuvek';
+    document.getElementById('alapUrl').textContent = window.location.origin + apiUrl;
+    document.getElementById('lekeres').addEventListener('click', function () {
+        const doboz = document.getElementById('valasz');
+        doboz.textContent = 'Lekérdezés...';
+        fetch(apiUrl)
+            .then(function (v) { return v.json(); })
+            .then(function (adat) { doboz.textContent = JSON.stringify(adat, null, 2); })
+            .catch(function (e) { doboz.textContent = 'Hiba: ' + e; });
+    });
+</script>
+</body>
+</html>
