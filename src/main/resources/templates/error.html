@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: fej('Hiba')}"></head>
+<body class="belso">
+<nav th:replace="~{fragments :: menu('')}"></nav>
+<header th:replace="~{fragments :: fejlec('Hiba történt', 'A kért oldal nem érhető el.')}"></header>
+
+<main class="tartalom">
+    <div class="container px-4 px-lg-5">
+        <div class="doboz text-center">
+            <h2 th:text="${status} + ' – ' + ${error}">404 – Not Found</h2>
+            <p class="text-muted">Ellenőrizze a címet, vagy térjen vissza a főoldalra.</p>
+            <a class="btn btn-primary btn-sm" th:href="@{/}">Vissza a főoldalra</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: lablec}"></footer>
+<th:block th:replace="~{fragments :: scriptek}"></th:block>
+</body>
+</html>

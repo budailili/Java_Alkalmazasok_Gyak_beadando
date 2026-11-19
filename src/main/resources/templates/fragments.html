@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- közös fej: minden oldal ezt használja -->
+<head th:fragment="fej(cim)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="AutóKönyv - személyek, járművek és telefonszámok nyilvántartása">
+    <meta name="author" content="Budai Lili, Bácskai József Kristóf">
+    <title th:text="${cim} + ' | AutóKönyv'">AutóKönyv</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap" rel="stylesheet">
+    <!-- Start Bootstrap - Grayscale téma (Bootstrap 5) -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <!-- saját módosítások a témához -->
+    <link th:href="@{/css/sajat.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- menüsor, az aktiv paraméter jelöli a kiválasztott menüpontot -->
+<nav th:fragment="menu(aktiv)" class="navbar navbar-expand-xl navbar-light fixed-top" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/}"><i class="fas fa-car-side me-2"></i>AutóKönyv</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Menü megnyitása">
+            Menü <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:classappend="${aktiv == 'fooldal'} ? 'active'" th:href="@{/}">Főoldal</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${aktiv == 'adatbazis'} ? 'active'" th:href="@{/adatbazis}">Adatbázis</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${aktiv == 'kapcsolat'} ? 'active'" th:href="@{/kapcsolat}">Kapcsolat</a></li>
+                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:classappend="${aktiv == 'uzenetek'} ? 'active'" th:href="@{/uzenetek}">Üzenetek</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${aktiv == 'diagram'} ? 'active'" th:href="@{/diagram}">Diagram</a></li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:classappend="${aktiv == 'crud'} ? 'active'" th:href="@{/crud}">CRUD</a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${aktiv == 'rest'} ? 'active'" th:href="@{/rest}">REST</a></li>
+                <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" th:classappend="${aktiv == 'login'} ? 'active'" th:href="@{/login}">Login</a></li>
+                <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" th:classappend="${aktiv == 'register'} ? 'active'" th:href="@{/register}">Regisztráció</a></li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="nav-link kilepes-gomb">
+                            Kilépés (<span sec:authentication="name">user</span>)
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- belső oldalak fejléce -->
+<header th:fragment="fejlec(cim, alcim)" class="oldal-fejlec">
+    <div class="container px-4 px-lg-5">
+        <h1 th:text="${cim}">Cím</h1>
+        <p th:if="${alcim != null}" th:text="${alcim}">alcím</p>
+    </div>
+</header>
+
+<!-- lábléc: minden oldal alján a készítők neve és Neptun-kódja -->
+<footer th:fragment="lablec" class="footer bg-black small text-center text-white-50">
+    <div class="container px-4 px-lg-5">
+        <p class="mb-1">Készítették: <strong class="text-white">Budai Lili</strong> (GVLRPX) és
+            <strong class="text-white">Bácskai József Kristóf</strong> (GHX0DH)</p>
+        <p class="mb-0">Java alkalmazások gyakorlat – beadandó feladat · Neumann János Egyetem, GAMF Kar · 2026</p>
+    </div>
+</footer>
+
+<!-- közös scriptek -->
+<th:block th:fragment="scriptek">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+</th:block>
+
+</body>
+</html>

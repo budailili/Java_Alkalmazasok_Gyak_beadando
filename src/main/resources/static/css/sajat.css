@@ -1,0 +1,147 @@
+/* Saját kiegészítések a Grayscale témához */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main {
+    flex: 1 0 auto;
+}
+
+/* menü: sok menüpont van, ezért kisebb belső margó kell, mint az eredeti témában */
+@media (min-width: 992px) {
+    #mainNav .nav-link {
+        padding: 1.6rem 0.6rem;
+        font-size: 0.82rem;
+        letter-spacing: 0.03em;
+    }
+    #mainNav.navbar-shrink .nav-link {
+        padding: 1.3rem 0.6rem 1.05rem;
+    }
+}
+#mainNav .kilepes-gomb {
+    background: none;
+    border: 0;
+    box-shadow: none !important;
+    text-align: left;
+    width: 100%;
+}
+#mainNav.navbar-shrink .kilepes-gomb:hover {
+    color: #64a19d;
+}
+
+/* belső oldalak fejléce a téma háttérképével */
+.oldal-fejlec {
+    padding: 8.5rem 0 3.5rem;
+    color: #fff;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.8) 100%),
+                url("../assets/img/bg-masthead.jpg") center / cover no-repeat;
+}
+.oldal-fejlec h1 {
+    font-family: "Varela Round", sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 0.15rem;
+    margin-bottom: 0.4rem;
+}
+.oldal-fejlec p {
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+    max-width: 46rem;
+}
+
+.tartalom {
+    padding: 3rem 0 4rem;
+    background-color: #f8f9fa;
+}
+
+/* kártyák, táblázatok */
+.doboz {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 1.75rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e3e6e8;
+}
+.doboz h2 {
+    font-family: "Varela Round", sans-serif;
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+}
+.table thead th {
+    background-color: #2b3a39;
+    color: #fff;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.rendszam {
+    display: inline-block;
+    font-family: "Varela Round", sans-serif;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border: 2px solid #222;
+    border-radius: 0.25rem;
+    background: #fff;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+.szin-potty {
+    display: inline-block;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    border: 1px solid #888;
+    margin-right: 0.35rem;
+    vertical-align: -0.05rem;
+}
+
+/* a téma gombjai nagyok, a táblázatokban kisebb kell */
+.btn.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.72rem;
+}
+
+/* űrlapok */
+.form-control, .form-select {
+    padding: 0.7rem 0.9rem;
+}
+.hiba {
+    color: #b02a37;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+.is-invalid {
+    border-color: #b02a37;
+}
+
+/* főoldal */
+.masthead h1 {
+    font-size: 3.2rem;
+    line-height: 3.2rem;
+}
+@media (min-width: 992px) {
+    .masthead h1 {
+        font-size: 6.5rem;
+        line-height: 6.5rem;
+    }
+}
+.funkcio i {
+    font-size: 1.6rem;
+    color: #64a19d;
+}
+
+/* diagramok */
+.diagram-doboz {
+    position: relative;
+    height: 340px;
+}
+
+/* üzenet szövege a táblázatban */
+.uzenet-szoveg {
+    white-space: pre-line;
+    max-width: 32rem;
+}
+
+.footer {
+    padding: 2.5rem 0;
+}
